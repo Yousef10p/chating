@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+    
+    <nav class="navbar bg-dark" style="height: 5.3rem;">
+        <div class="container-fluid d-flex justify-content-between">
+
+            
+                <form class="d-flex" role="search">
+                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                  <button class="btn btn-outline-warning" type="submit">Search</button>
+                </form>
+              
+
+            <h1 class="text-warning fst-italic username">{{currentUser}}</h1>
+
+            {% if user.is_authenticated %}
+            <form action="{% url 'chat:logout' %}" method="post">
+                {% csrf_token %}
+                <button class="btn btn-outline-danger" type="submit">Log Out</button>
+            </form>
+            {% endif %}
+
+            
+        </div>
+    </nav>
+
+
+<ul>
+    {% for user in users %}
+        <li><a href="{{ user.username }}/">{{ user.username }}</a></li>
+    {% endfor %}
+</ul>
+    
+</body>
+</html>

@@ -1,0 +1,10 @@
+<form method="post">
+    {% csrf_token %}
+    {{form}}
+    <button type="submit">submit</button>
+</form>
+
+<div>
+    {% csrf_token %}
+    <a href="{% url "chat:login" %}">have an account ?</a>
+</div>

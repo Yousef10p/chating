@@ -1,0 +1,11 @@
+<form method="post">
+    {% csrf_token %}
+    {{form}}
+    <button type="submit">submit</button>
+</form>
+<div>
+    <form action="{% url 'chat:authView' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">register</button>
+    </form>
+</div>
