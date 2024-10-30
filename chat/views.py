@@ -4,21 +4,21 @@ from django.db import models
 from .models import Message
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-
+from .forms import CustomUserCreationForm
 
 @login_required
 def lobby(request):
-    users = User.objects.exclude(username=request.user.username)  # Exclude user record
+    users = User.objects.exclude(username=request.user.username).order_by('-last_login')  # Exclude user record
     return render(request, 'chat/lobby.html', {'users': users, 'currentUser':request.user.username})
 
 def authView(request):
     if request.method == "POST":
-        form = UserCreationForm(request.POST or None)
+        form = CustomUserCreationForm(request.POST or None)
         if form.is_valid():
             form.save()
             return redirect('chat:login')
     else:       
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     return render(request, "registration/signup.html", {"form": form})
 
 
@@ -47,7 +47,8 @@ def chat_room(request, username):
 
     context = {
         'username': username,
-        'messages': messages
+        'messages': messages,
+        
     }
     
     return render(request, 'chat/chat_room.html', context)

@@ -1,27 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Lobby</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <style>
+
+        a{
+            color: white;
+            text-decoration: none;
+            
+        }
+        
+        .usr:hover{
+            background-color: red;
+        }
+        
+
+    </style>
+
 </head>
 <body>
     
     <nav class="navbar bg-dark" style="height: 5.3rem;">
         <div class="container-fluid d-flex justify-content-between">
 
-            
-                <form class="d-flex" role="search">
-                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                  <button class="btn btn-outline-warning" type="submit">Search</button>
-                </form>
-              
-
-            <h1 class="text-warning fst-italic username">{{currentUser}}</h1>
+            <a href="/"><h1 class="text-warning fst-italic username">@{{currentUser}}</h1></a>
 
             {% if user.is_authenticated %}
             <form action="{% url 'chat:logout' %}" method="post">
@@ -29,17 +35,62 @@
                 <button class="btn btn-outline-danger" type="submit">Log Out</button>
             </form>
             {% endif %}
-
-            
         </div>
     </nav>
 
 
-<ul>
-    {% for user in users %}
-        <li><a href="{{ user.username }}/">{{ user.username }}</a></li>
-    {% endfor %}
-</ul>
-    
+    {% comment %} SEARCH BAR {% endcomment %}
+    <div>
+        <div class="container mb-5">
+            <input class="form-control mx-auto mt-5 w-75 bg-secondary border border-dark text-warning searchInput text-light"
+                list="datalistOptions" id="exampleDataList" placeholder="Type to search...">
+            <datalist id="datalistOptions">
+            </datalist>
+        </div>
+    </div>
+
+    {% comment %} users {% endcomment %}
+    <div class="container">
+        <ul class="list-group w-75 mx-auto">
+            {% for user in users %}
+            <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center  mb-3 text-light usr"
+                style="border: hidden; border-bottom: solid .25rem; background-color: gray;">
+                <a id="{{user.username}}" href="{{ user.username }}/">@{{ user.username }}</a>
+                <p>last login: {{user.last_login}}</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+
+<script>
+
+    const search = document.querySelector('.searchInput');
+
+    search.addEventListener('keyup', e => {
+    const lis = Array.from(document.querySelectorAll('li'));
+    lis.forEach(li => {
+        if (!li.children[0].innerHTML.includes(search.value)) {
+            li.classList.remove('d-flex');
+            li.classList.add('d-none');
+           
+        }
+    })
+})
+
+search.addEventListener('keyup', e => {
+    const lis = Array.from(document.querySelectorAll('li'));
+    lis.forEach(li => {
+
+
+        if (li.children[0].innerHTML.includes(search.value)) {
+            li.classList.remove('d-none');
+            li.classList.add('d-flex');
+        }
+    })
+})
+
+
+</script>
 </body>
 </html>
